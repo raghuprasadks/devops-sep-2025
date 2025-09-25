@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask & MySQL CRUD</title>
+</head>
+<body>
+    <h1>Items</h1>
+
+    <form action="{{ url_for('add_item') }}" method="POST">
+        <input type="text" name="content" placeholder="New item content" required>
+        <button type="submit">Add Item</button>
+    </form>
+
+    <hr>
+
+    <ul>
+        {% for item in items %}
+        <li>
+            {{ item.content }}
+            <form action="{{ url_for('delete_item', item_id=item.id) }}" method="POST" style="display:inline;">
+                <button type="submit">Delete</button>
+            </form>
+            <form action="{{ url_for('update_item_form', item_id=item.id) }}" method="GET" style="display:inline;">
+                <button type="submit">Update</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  flask-app:
+    build: .
+    image: pythonflaskwithmysql # Add this line
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mysql
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=password
+      - MYSQL_DB=mydatabase
+  mysql:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: mydatabase
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:

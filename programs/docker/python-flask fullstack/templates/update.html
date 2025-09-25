@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Item</title>
+</head>
+<body>
+    <h1>Update Item</h1>
+    <form action="{{ url_for('update_item', item_id=item.id) }}" method="POST">
+        <input type="text" name="content" value="{{ item.content }}" required>
+        <button type="submit">Update</button>
+    </form>
+    <a href="{{ url_for('get_items_html') }}">Cancel</a>
+</body>
+</html>

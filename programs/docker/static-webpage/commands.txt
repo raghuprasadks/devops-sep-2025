@@ -1,0 +1,12 @@
+Docker commands
+1. docker build -t static-webpage .
+2. docker images
+3. docker run -d -p 80:80 --name static-webpage static-webpage
+4. In browser type 127.0.0.1
+5. docker login
+6. docker build -t your-dockerhub-username/static-webpage .
+7. docker push your-dockerhub-username/static-webpage
+8. docker ps
+9. docker stop static-webpage
+10. docker pull your-dockerhub-username/static-webpage
+11. docker run -d -p 80:80 --name my-webserver-container your-dockerhub-username/my-static-site
