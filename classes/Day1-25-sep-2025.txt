@@ -1,0 +1,34 @@
+Agenda:
+1. Introduction to DevOps
+2. Getting started with source control
+verify whether git is installed in the system
+https://git-scm.com/downloads
+3. Visual Studio code
+https://code.visualstudio.com/download
+4. create folders
+devops->programs->web
+5. open web folder from vs code
+6. Create index.html
+7. Extensions - live server
+first option from ritwick dey
+install
+run live server
+8. in command prompt
+type
+ipconfig
+copy ipv4 ipaddress..
+
+172.24.192.1:53787/index.html
+
+git config --global user.name "your name"
+git config --global user.email "your email"
+
+or
+
+control panel
+user accounts
+credential manager
+click for windows credentials
+
+look for git entries
+edit/remove previous entry
