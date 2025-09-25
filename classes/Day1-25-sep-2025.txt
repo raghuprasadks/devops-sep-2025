@@ -17,18 +17,101 @@ run live server
 type
 ipconfig
 copy ipv4 ipaddress..
-
 172.24.192.1:53787/index.html
-
 git config --global user.name "your name"
 git config --global user.email "your email"
-
 or
-
 control panel
 user accounts
 credential manager
 click for windows credentials
-
 look for git entries
 edit/remove previous entry
+9. Create an account in GitHub
+https://github.com/
+login
+create a new repository
+devopsdsgitdemo
+one time command
+git init
+git add index.html
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/raghuprasadks/devopsdsgitdemo.git
+git push -u origin main
+
+
+10. Deploy using github actions
+
+11. Any change in the code - modification/addition/deletion
+
+git status
+git add index.html
+for more files
+git add .
+git commit -m "updated index.html"
+git push
+
+
+12. CI/CD
+
+13. Docker
+in windows search check whether 
+Docker desktop is installed
+
+https://docs.docker.com/desktop/setup/install/windows-install/
+virtualization
+
+ubuntu
+
+
+13. Docker hands on
+
+1. Build a sample python flask api
+
+a. create dockerhandson folder
+b. open in vs code
+c. in the terminal create a virtual environment
+d. create and activate virtual environment
+python --version
+python -m venv venv
+
+docker
+steps : 1. Create a docker image
+
+a. download and install python
+b. install required libraries namely flask
+c. copy the program i,e app.py
+d. write command to execute the program
+
+dockerhub
+
+e. run docker run
+build docker image
+docker build -t demoflask .
+
+docker run -p 5000:5000 --name demoflask demoflask
+
+https://github.com/raghuprasadks
+https://github.com/raghuprasadks/devops-sep-2025
+programs
+docker
+pythonflask
+copy paste Dockerfile
+
+https://www.w3schools.com/git/
+
+https://aws.amazon.com/
+
+
+
+
+
+
+
+2. Test locally
+3. Create docker image
+4. Create docker container using docker image
+
+
+
