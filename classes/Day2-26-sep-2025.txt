@@ -1,0 +1,48 @@
+Agenda:
+Recap -
+Devops
+phases in software development
+SAD - (Shiromani Akali Dal)
+S - System Engineering
+A - Analysis
+D - Design
+TMC - (Trunamool Congress)
+T - Testing
+M - Maintenance
+C - Coding
+
+Source code management - Git and GitHub
+Docker 
+www.kaushalya.tech
+git
+repositories
+https://github.com/raghuprasadks/devops-sep-2025
+programs->docker->pythonflask
+
+create devopsgit folder
+open in terminal
+git clone https://github.com/raghuprasadks/devops-sep-2025
+
+
+1. Docker and Docker Hub
+Sign Up with docker hub
+https://hub.docker.com/
+login
+
+a. Display images in the docker
+docker images
+docker ps
+docker ps -a
+docker run -it demoflask /bin/bash 
+
+2. Deploying different types of applications
+a. Create flask api for simple
+CRUD 
+create pythonflask folder
+download all the files from
+the git
+copy files to pythonflask folder
+
+
+3. CI-CD with githubactions
+4. CI-CD with Jenkins
