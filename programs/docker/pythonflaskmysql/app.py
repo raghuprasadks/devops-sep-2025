@@ -12,11 +12,12 @@ retries = 5
 while not db and retries > 0:
     try:
         db = mysql.connector.connect(
-            host=os.getenv('MYSQL_HOST'),
-            user=os.getenv('MYSQL_USER'),
-            password=os.getenv('MYSQL_PASSWORD'),
-            database=os.getenv('MYSQL_DB')
-        )
+    host=os.getenv('MYSQL_HOST', 'mysql'),  # points to host
+    user=os.getenv('MYSQL_USER', 'root'),
+    password=os.getenv('MYSQL_PASSWORD', 'Akashbr'),
+    database=os.getenv('MYSQL_DB', 'flaskdb')
+)
+
         print("Database connection successful!")
     except mysql.connector.errors.DatabaseError as e:
         print(f"Database is unavailable. Retrying in 5 seconds... ({retries} attempts left)")
