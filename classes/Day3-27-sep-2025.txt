@@ -73,6 +73,7 @@ git clone https://github.com/raghuprasadks/awscicdgithubactions
 
 cd awscicdgithubactions
 delete .git folder
+create awsdevops repository in github
 
 ssh -i "DSDevopsserver1kp.pem" ubuntu@ec2-13-126-63-112.ap-south-1.compute.amazonaws.com
 
@@ -81,10 +82,46 @@ Steps - git hub actions
 1. Create a sample python flask app
 2. create a work flow file
 3. push this to GitHub
+git init
+git add .
+git commit -m "first time"
+git branch -M main
+git add remote origin <>
+git push -u origin main
+
 4. create image of the python flask app
 5. push app to docker hub
 6. pull image from docker hub to AWS EC2
 7. Run instance on EC2
+
+Jenkins
+
+
+End to end programming
+
+create mlendtoend folder
+
+1. Build a linear regression model using python on the publicly available dataset
+
+Gemini
+ Build a linear regression model using python on the publicly available dataset
+linearmodel.py
+install the required libraries
+skikit-learn pandas
+
+2. Create a pickle file 
+convert into model into a pickle file
+linearmodel.py
+3. Create a Flask API
+use python flask to create api to read the model and predict
+app.py
+install flask
+4. Deploy on docker 
+
+
+
+
+
 
 
 
