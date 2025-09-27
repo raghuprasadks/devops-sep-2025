@@ -1,0 +1,99 @@
+Agenda:
+
+1. DEVOPS using cloud platforms
+AWS 
+Cloud Computing
+Service model
+Infrastructure AS A Service - IAAS
+Platform as a service - PAAS
+Software as a service - SAAS
+
+Deployment model
+public
+private
+hybrid
+
+AWS
+Azure
+Google Cloud
+
+AWS 
+EC2 - Elastic Cloud Compute 
+Servers
+S3 - Simple Storage Solution
+RDS - Relational Data Service
+
+EC2 hands on
+1. Login to AWS with your root account
+2. Select data center as Mumbai
+3. search for EC2
+Launch instance
+DSDevopsserver1
+Application and OS Image - Ubuntu
+create key value pair
+give name for kp - DSDevopsserver1kp
+check three check boxes
+ssh
+https
+http
+
+connect
+
+install nginx on ubuntu
+
+commands
+sudo apt update
+sudo apt install nginx
+open browser with the public ip
+http://35.154.183.149/
+
+https://ubuntu.com/tutorials/install-and-configure-nginx#1-overview
+
+cd /etc/nginx/
+
+sudo systemctl stop nginx
+
+Lab Kaushalya AWS
+https://aws.amazon.com/
+sign in to console
+login as root user
+labkaushalya@gmail.com
+kaushalyalab@2025
+
+commands
+sudo apt update
+sudo apt install nginx
+open browser with the public ip
+http://<publicip>
+
+create awsdevops folder
+cd awsdevops
+clone this repository
+git clone https://github.com/raghuprasadks/awscicdgithubactions
+
+cd awscicdgithubactions
+delete .git folder
+
+ssh -i "DSDevopsserver1kp.pem" ubuntu@ec2-13-126-63-112.ap-south-1.compute.amazonaws.com
+
+
+Steps - git hub actions
+1. Create a sample python flask app
+2. create a work flow file
+3. push this to GitHub
+4. create image of the python flask app
+5. push app to docker hub
+6. pull image from docker hub to AWS EC2
+7. Run instance on EC2
+
+
+
+
+
+
+
+
+
+
+
+
