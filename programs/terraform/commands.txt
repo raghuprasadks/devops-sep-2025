@@ -1,0 +1,194 @@
+1)Download and install terraform
+
+https://developer.hashicorp.com/terraform/install
+
+download windows 386
+
+extract the zip file 
+
+open the zip file and copy the terraform binary file
+
+create a folder called terraform under c drive program files folder and inside it paste terraform binary file then copy the folder path
+
+then open environment variables and set the path 
+
+2)how to create root user 
+
+1)In the search bar search for iam
+2)users -> create user	
+3)give a name and click next 
+4)attach polices directly
+under that select adminstratorAccess
+5)then create user
+6)now click on the user u just created 
+7)then click on create access key
+8)select command line interface
+9)next
+10)click on create access key
+11)copy ur keys and paste it somewhere
+11)download csv file 
+
+3)Download and install amazon cli
+
+https://awscli.amazonaws.com/AWSCLIV2.msi
+
+click on next till you finsih 
+
+then go to command prompt and check for
+
+aws --version to verify insatallation
+
+4)login into amazoncli
+
+open cmd -> aws configure
+
+AWS Access Key ID- paste the id you created 
+AWS Secret Access Key - paste the key you created 
+Default region name [None]: ap-south-1
+Default output format [None]:     (just press enter)
+
+5)create learn terraform folder and open in vs code 
+
+1)create provider.tf inside it and paste this
+
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+      version = "6.16.0"
+    }
+  }
+}
+
+provider "aws" {
+  # Configuration options
+  region = "ap-south-1"
+}
+
+2)create ec2.tf and paste this code 
+
+resource "aws_instance" "example" {
+  ami           = "ami-06fa3f12191aa3337"
+  instance_type = "t2.micro"
+
+  tags = {
+    Name = "HelloWorld"
+  }
+}
+
+6)run this follwing commands to create and delete an aws ec2 instance using terraform
+
+1)terraform init
+2)terraform plan
+3)terraform validate (To check if syntax is correct)
+4)terraform plan -out plan.txt
+5)terraform apply -auto-approve (To create instance in your aws ec2)
+6)terraform destroy -auto-approve(To terminarte the instance)
+
+7)variables 
+
+1)create variables.tf and paste this
+
+variable "size" {
+    type = string
+    default = "t2.micro"
+    description = "This is instance size"
+  
+}
+
+2)change your ec2.tf to use that variable like below 
+
+resource "aws_instance" "example" {
+  ami           = "ami-06fa3f12191aa3337"
+  instance_type = var.size
+
+  tags = {
+    Name = "HelloWorld"
+  }
+}
+
+
+3)run - > terraform plan 
+
+see how the variable is  taken from variables.tf
+
+8)To see your private ip in your variables.tf
+
+add these lines
+
+output "Privateip" {
+  value = aws_instance.example.private_ip
+}
+
+now to see it action 
+
+run -> terraform apply -auto-approve
+
+now you can see the  private  ip of the ec2 instance you just created  in your vs code terminal 
+
+go to your aws console and verify the private ip
+
+you can destroy the instance by running the follwing command
+
+terraform destroy -auto-approve 
+
+9)To create a s3 bucket before an ec2 instance change the ec2.tf to 
+
+resource "aws_s3_bucket" "mybucket" {
+        bucket = "my-bucket-9738"
+}
+
+resource "aws_instance" "example" {
+  ami           = "ami-06fa3f12191aa3337"
+  instance_type = var.size
+  depends_on = [aws_s3_bucket.mybucket]
+
+  tags = {
+    Name = "HelloWorld"
+  }
+  
+}
+
+and run -> terraform apply -auto-approve
+
+go to your aws console and verify , you will have ec2 instance name helloworld and
+also a s3 bucket with name "my-bucket-9738"
+
+10)To create multiple instances of the same 
+
+add count in ec2.tf
+
+resource "aws_s3_bucket" "mybucket" {
+        bucket = "my-bucket-9738"
+}
+
+resource "aws_instance" "example" {
+  ami           = "ami-06fa3f12191aa3337"
+  count = 2
+  instance_type = var.size
+  depends_on = [aws_s3_bucket.mybucket]
+
+  tags = {
+    Name = "HelloWorld"
+  }
+  
+}
+
+and add a index numbder in variables.tf for Privateip
+
+variable "size" {
+    type = string
+    default = "t2.nano"
+    description = "This is instance size"
+}
+
+output "Privateip" {
+  value = aws_instance.example[1].private_ip
+}
+
+
+now run -> terraform apply -auto-approve
+
+you can now verify, there will two ec2 instances with "helloworld" in you console
+
+To terminate -> terraform destroy -auto-approve

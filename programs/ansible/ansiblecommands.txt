@@ -1,0 +1,160 @@
+=>ansible tutorial
+
+1)create an ec2 ubuntu instance with the name ansible
+2)ssh instance from pem file directory
+3)sudo apt update -y
+  sudo apt upgrade -y
+4)To install ansible -> sudo apt install ansible
+5)To verify ansible installation -> ansible --version
+6)create one more ec2 instance with the name target
+--------------------------------------------------------------------------------------------------
+7)To make ansible server to talk to target server in a passwordless way
+  1)go back to ansible server and run -> ssh-keygen -> press enter till it finishes
+  2)ls /home/ubuntu/.ssh/
+  3)cat /home/ubuntu/.ssh/yourid.pub
+  4)copy the public key
+8)login to target server using ssh
+  update using 
+   ->sudo apt update
+   ->sudo apt upgrade -y
+  1)ssh keygen 
+  2)ls .ssh/
+  3)vim ~/.ssh/authorized_keys
+  4)Enter Normal Mode
+
+Vim has modes:
+
+Normal (default) → navigate, delete, copy
+
+Insert → type/paste content
+
+Press Esc to make sure you’re in Normal mode.
+
+1.Delete all content
+
+Type:
+
+ggVGd
+
+
+Explanation:
+
+gg → move cursor to the top of the file
+
+V → start visual line selection
+
+G → select until the end of the file
+
+d → delete the selected content
+
+Now the file is empty.
+
+2.Enter Insert Mode
+
+Press:
+
+i
+
+
+You can now paste or type new content.
+
+3.️Paste content (from clipboard)
+
+If you’re in a terminal like Ubuntu:
+
+Right-click → Paste
+
+Or press Shift + Insert
+
+4.Save and exit
+
+Press Esc to go back to Normal mode
+
+Then type:
+
+:wq
+
+
+:w → write/save
+
+:q → quit
+
+File is now updated with your new content.
+
+5)go back to the ansible terminal and do ssh privateip (private ip of target server)
+
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes  
+
+now u are connected to target from ansible server
+
+you can open another git bash terminal and ssh into ansible server
+
+--------------------------------------------------------------------------------------------------------
+9)To create a file in target server from ansible server using ansible adhoc commands
+
+create a file called inventory in ansible server and paste the private ip address of target server
+
+touch inventory
+
+nano inventory
+
+paste the private ip of target server s
+
+ctrl + o -> enter -> ctrl + x
+
+ansible -i inventory all -m "shell" -a "touch devopsclass"
+
+10)to check the disk space available on target server
+
+ansible -i inventory all -m "shell" -a "df -h"
+
+--------------------------------------------------------------------------------------------------------------
+
+11)To install nginx and start nginx on target server using ansible playbook
+
+touch first-playbook.yml
+
+nano first-playbook.yml
+
+paste this inside 
+
+---
+- name: Install and start nginx
+  hosts: all
+  become: yes
+
+  tasks:
+   - name: Install nginx
+     apt:
+       name: nginx
+       state: present
+   - name: Start nginx
+     service:
+        name: nginx
+        state: started
+
+ctrl + o -> enter -> ctrl + x
+
+12) now to run this use the command below
+
+ansible-playbook -i inventory first-playbook.yml
+
+
+13)To verify go to public ip address of target server in your browser change https to http and you should see welcome to nginx
+
+or
+
+run -> sudo systemctl status nginx
+
+on the target server
+
+
+
+
+
+
+
+
+
+
+

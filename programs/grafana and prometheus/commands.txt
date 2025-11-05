@@ -1,0 +1,155 @@
+1)create a folder and open it in vscode
+2)npm init -y
+3)install express and prom-client
+
+npm i express
+npm i prom-client
+
+4)run the index.js and check it locally 
+
+node index.js in your vs code terminal
+
+open it in browser using localhost:3000
+
+and localhost:3000/metrics to see the metrics
+
+5)build the docker image
+
+docker build -t yourdockerhubusername/node-monitoring-k8s .
+
+6)push the image to dockerhub
+
+docker push yourdockerhubusername/node-monitoring-k8s
+
+7)start minikube using 
+
+minikube start
+
+8)create a k8s folder and cd into it and run this command
+
+kubectl create deployment node-app --image=yourdockerhubusername/node-monitoring-k8s --dry-run=client -o yaml > deployment.yaml
+
+9)come back to the previous directory and apply it into kubernetes cluster
+
+kubectl apply -f k8s/deployment.yaml
+
+10)we need to create kubernetes service as well
+
+kubectl expose deployment node-app --port=3001 --target-port=3001 --type=NodePort --dry-run=client -o yaml > service.yaml
+
+kubectl apply -f service.yaml
+
+11)now we need to do port forwarding
+
+kubectl port-forward svc/node-app 8080:3001
+
+=>now to verify go here
+
+127.0.0.1:8080
+
+127.0.0.1:8080/metrics
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+12)we need to install helm
+
+choco install kubernetes-helm -y
+
+To verify installation - helm version
+
+13)open one more terminal in vscode and run these commands to add prometheus
+
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+
+helm repo update
+
+helm install prometheus prometheus-community/prometheus --namespace monitoring --create-namespace --set server.service.type=NodePort --set server.service.nodePort=30090 --set alertmanager.enabled=false
+
+kubectl get all -n monitoring - to verify run this command
+
+kubectl edit configmap prometheus-server -n monitoring
+
+=>add this under the scrape-configs
+
+scrape_configs:
+  - job_name: 'node-app'
+    static_configs:
+      - targets: ['node-app.default.svc.cluster.local:3001']
+
+=>kubectl rollout restart deployment prometheus-server -n monitoring
+
+=>kubectl port-forward svc/prometheus-server 9090:80 -n monitoring
+
+=>To verify your prometheus server go to - 127.0.0.1:9090
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+14)open the third terminal in vscode and run these command for grafana
+
+helm repo add grafana https://grafana.github.io/helm-charts
+
+helm repo update
+
+helm install grafana grafana/grafana --namespace monitoring --create-namespace --set server.service.type=NodePort --set server.service.nodePort=30091 --set persistence.enabled=false
+
+kubectl get all -n monitoring - to verify run this command
+
+=>To get grafana password
+
+[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String((kubectl get secret grafana -n monitoring -o jsonpath="{.data.admin-password}")))
+
+copy the password
+
+=>kubectl port-forward service/grafana 3000:80 -n monitoring
+
+=>view your grafana dashboard here -> 127.0.0.1:3000
+
+login using 
+
+username - admin
+
+password - whatever you copied
+
+=>To add prometheus as a data source
+
+click on data sources 
+
+add new connection
+
+in search bar type prometheus
+
+now click add a new data source
+
+unmark default
+
+add name as => prometheus-server
+
+add prometheus-server URL as => http://prometheus-server:80
+
+scroll down and click on save & test
+
+click on building a dashboard
+
+click on import dashboard and then save dashboard
+
+now go to dashboard on the sidebar and you will be able to see the new dashboard you just added click on import dashboard over there 
+
+11159 -> paste this in the id and click on load
+
+select prometheuse-server as source
+
+go to dashboards and now you wil have a new dashboard named "nodejs application dashboard" -> click on it you will able to see your nodejs using grafana dashboard 
+
+=>open a gitbash terminal and run this to create some traffic and see the spike in traffic in the grafana dashboard , select 5 minutes timeframe and user cpu
+
+while true; do
+  curl http://127.0.0.1:8080/
+  sleep 0.2
+done
+
+
+
+
+
+
+
+
+ 

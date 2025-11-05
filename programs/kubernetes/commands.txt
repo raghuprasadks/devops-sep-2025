@@ -1,0 +1,190 @@
+Reference video : https://www.youtube.com/watch?v=s_o8dwzRlu4
+
+1)open powershell as adminstrator
+
+choco install minikube
+
+2)minikube status
+
+3)Run this command - minikube start --driver=docker
+
+Minikube will:
+
+Create a virtual cluster using Docker as the host
+
+Pull necessary Kubernetes images
+
+Start one node (control-plane + worker)
+
+Configure kubectl automatically
+
+4)kubectl get node
+
+5)Create a folder called K8S-DEMO
+
+inside that create a file called mongo-config.yaml and mongo-secret.yaml
+
+copy and paste this in mongo-config.yaml
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongo-config
+data:
+  mongo-url: mongo-service
+
+copy and paste this in mongo-secret.yaml
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mongo-secret
+type: Opaque
+data:
+  mongo-user: bW9uZ291c2Vy
+  mongo-password: bW9uZ29wYXNzd29yZA==
+
+
+6)create mongo.yaml file inside K8S-DEMO folder and paste this
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-deployment
+  labels:
+    app: mongo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo:5.0
+        ports:
+        - containerPort: 27017
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: mongo-user
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: mongo-password  
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-service
+spec:
+  selector:
+    app: mongo
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+
+7)create a webapp.yaml file inside the K8S-DEMO folder and paste this
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-deployment
+  labels:
+    app: webapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webapp
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+      - name: webapp
+        image: nanajanashia/k8s-demo-app:v1.0
+        ports:
+        - containerPort: 3000
+        env:
+        - name: USER_NAME
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: mongo-user
+        - name: USER_PWD
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: mongo-password 
+        - name: DB_URL
+          valueFrom:
+            configMapKeyRef:
+              name: mongo-config
+              key: mongo-url
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-service
+spec:
+  type: NodePort
+  selector:
+    app: webapp
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+      nodePort: 30100
+
+8)configmap and secrets must exist  before deployements so run this commands in order from the directory where your project files are present
+
+kubectl apply -f mongo-config.yaml
+kubectl apply -f mongo-secret.yaml
+kubectl apply -f mongo.yaml
+kubectl apply -f webapp.yaml
+
+9)
+=>To get all the components created inside the cluster
+
+kubectl get all
+
+=>To get config and secrets
+
+kubectl get configmap
+
+kubectl get secret
+
+=>To get pod 
+
+kubectl get pod
+
+=>To get all the subcommands you can use
+
+kubectl --help
+
+=>To get more detail about the specific component for example webapp service(it can be used for all the components like pod deployement etc)
+
+kubectl describe nameofthecomponent actualnameofyourcomponent
+
+kubectl describe service webapp-service
+
+
+10)To validate that our application is accessible from the browser run the below command
+
+minikube service webapp-service
+
+=>minikube commands
+
+minikube stop -> Pause/stop the running cluster
+minikube start -> Restart the cluster
+minikube delete -> Remove the cluster completely
